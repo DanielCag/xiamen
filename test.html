@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>MapVGL</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<style>
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		#map_container {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+		}
+	</style>
+	<script src="./libs/d3.v3.js"></script>
+	<script src="//api.map.baidu.com/api?v=1.0&type=webgl&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
+	<script src="//mapv.baidu.com/build/mapv.min.js"></script>
+	<script src="./js/common.js"></script>
+	<script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.107/dist/mapvgl.min.js"></script>
+	<script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.107/dist/mapvgl.threelayers.min.js"></script>
+</head>
+<body>
+	<div id="map_container"></div>
+	<script>
+		// let map = initMap({
+		// 	tilt: 60,
+		// 	heading: 0,
+		// 	center: [118.167588, 24.483765],
+		// 	zoom: 13,
+		// });
+		let pdata = [];
+		let sdata = [];
+		d3.csv('./data/gxdc_gj20201221.csv', function(data) {
+			for (let i = 0; i < data.length - 1; i++) {
+				let distance = GetDistance(data[i].LATITUDE, data[i].LONGITUDE, data[i + 1].LATITUDE,
+					data[i + 1].LONGITUDE);
+				let s = distance / 15;
+				pdata.push(s);
+			}
+			// for (let i = 0; i < data.length; i++) {
+			// 	if (data[i].LOCATING_TIME.split(' ')[1].split(':')[0] == '06') {
+			// 		sdata.push([
+			// 			data[i].LOCATING_TIME,
+			// 			s[i]
+			// 		])
+			// 	}
+			// }
+			console.log(pdata);
+		})
+		// d3.csv('./data/p.csv', function(data) {
+		// 	let points = [];
+		// 		// let point = new BMap.Point(tem[0], tem[1]);
+		// 		// let marker = new BMap.Marker(point);
+		// 		// map.addOverlay(marker);
+		// 		// points.push(point);
+		// 		// console.log(data[i].LONGITUDE);
+		// 		// console.log(data[i].LATITUDE);
+
+		// 	//飞线图
+		// 	let curve = new mapvgl.BezierCurve();
+		// 	let curveData = [];
+		// 	for (let i = 0; i < 73; i++) {
+		// 		startPoint = map.lnglatToMercator(data[i].longitude,data[i].latitude);
+		// 		endPoint = map.lnglatToMercator(data[i+72].longitude,data[i+72].latitude)
+		// 		// console.log(startPoint);
+		// 		curve.setOptions({
+		// 			start: [startPoint[0], startPoint[1]],
+		// 			end: [endPoint[0], endPoint[1]]
+		// 		});
+		// 		let curveModelData = curve.getPoints(60);
+		// 		curveData.push({
+		// 			geometry: {
+		// 				type: 'LineString',
+		// 				coordinates: curveModelData
+		// 			},
+		// 			properties: {
+		// 				count: Math.random()
+		// 			}
+		// 		});
+		// 	}
+		// 	let view = new mapvgl.View({
+		// 		effect: [
+		// 			new mapvgl.BrightEffect({
+		// 				threshold: 0,
+		// 				blurSize: 2,
+		// 				clarity: 0.4
+		// 			}),
+		// 		],
+		// 		map: map
+		// 	});
+		// 	let lineLayer = new mapvgl.LineTripLayer({
+		// 		color: 'rgb(255, 255, 204)',
+		// 		step: 0.3
+		// 	});
+		// 	view.addLayer(lineLayer);
+		// 	lineLayer.setData(curveData.map(item => {
+		// 		item.geometry.coordinates = item.geometry.coordinates.map(item => {
+		// 			item[2] += 3;
+		// 			return item;
+		// 		})
+		// 		return item;
+		// 	}));
+		// 	let LineLayer = new mapvgl.SimpleLineLayer({
+		// 		blend: 'lighter',
+		// 		color: 'rgb(255, 153, 0, 0.6)'
+		// 	});
+		// 	view.addLayer(LineLayer);
+		// 	LineLayer.setData(curveData);
+		// 	// console.log(curveData);
+		// 	// console.log(start21);
+		// 	// console.log(start22);
+		// 	// console.log(start23);
+		// 	// console.log(start24);
+		// 	// console.log(start25);
+		// 	// console.log(end21);
+		// 	// console.log(end22);
+		// 	// console.log(end23);
+		// 	// console.log(end24);
+		// 	// console.log(end25);
+		// })
+		//开锁点车辆
+		// let point = [];
+		// let lineData = [];
+		// let dt = new Array();
+		// for (var i = 0; i < 100; i++) {
+		// 	dt[i] = new Array();
+		// }
+		// let d = new Array();
+		// for (var i = 0; i < 5; i++) {
+		// 	d[i] = new Array();
+		// 	for (let j = 0; j < 162; j++) {
+		// 		d[i][j] = new Array();
+		// 	}
+		// }
+		// d3.csv('./data/gxdc_dd.csv', function(data) {
+		// 	d3.csv('./data/opengraph.csv', function(t_data) {
+		// 		for (let i = 0; i < data.length; i++) {
+		// 			if (data[i].LOCK_STATUS == 0) {
+		// 				for (let j = 95; j < t_data.length; j++) {
+		// 					let distance = GetDistance(data[i].LATITUDE, data[i].LONGITUDE, t_data[j]
+		// 						.LATITUDE,
+		// 						t_data[j].LONGITUDE);
+		// 					if (distance <= 100) {
+		// 						dt[j].push(data[i]);
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 		// console.log(dt);
+		// 		for (let i = 0; i < data.length; i++) {
+		// 			if (data[i].LOCK_STATUS == 1) {
+		// 				for (let j = 95; j < t_data.length; j++) {
+		// 					for (let k = 0; k < dt[j].length; k++) {
+		// 						if(data[i].BICYCLE_ID == dt[j][k].BICYCLE_ID &&
+		// 						data[i].UPDATE_TIME.split(' ')[0] == dt[j][k].UPDATE_TIME.split(' ')[0] && 
+		// 						parseFloat(data[i].UPDATE_TIME.split(' ')[1].split(':')[0]) >= parseFloat(dt[j][k].UPDATE_TIME.split(' ')[1].split(':')[0])) {
+		// 							d[j-95][k].push(data[i]);
+		// 						}
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 		console.log(d);
+		// 	})
+		// 	// for (var i = 0; i < data.length; i++) {
+		// 	// 	data[i].FENCE_LOC = data[i].FENCE_LOC.split(',');
+		// 	// 	for (let j = 0; j < 10;) {
+		// 	// 		let lng = parseFloat(data[i].FENCE_LOC[j]);
+		// 	// 		let lat = parseFloat(data[i].FENCE_LOC[j + 1]);
+		// 	// 		j += 2;
+		// 	// 		let tem = convertWGS84ToBD09(lng, lat);
+		// 	// 		point.push(tem[0]);
+		// 	// 		// console.log(tem[0]);
+		// 	// 		point.push(tem[1]);
+		// 	// 		// console.log(tem[1]);
+		// 	// 	}
+		// 	// 	lineData.push({
+		// 	// 		geometry: {
+		// 	// 			type: 'LineString',
+		// 	// 			coordinates: [
+		// 	// 				[point[i * 10], point[i * 10 + 1]],
+		// 	// 				[point[i * 10 + 2], point[i * 10 + 3]],
+		// 	// 				[point[i * 10 + 4], point[i * 10 + 5]],
+		// 	// 				[point[i * 10 + 6], point[i * 10 + 7]],
+		// 	// 				[point[i * 10 + 8], point[i * 10 + 9]],
+		// 	// 			]
+		// 	// 		},
+		// 	// 	});
+		// 	// }
+		// 	// let view = new mapvgl.View({
+		// 	// 	map: map
+		// 	// });
+		// 	// let layer = new mapvgl.LineLayer({
+		// 	// 	blend: 'lighter',
+		// 	// 	color: 'rgba(255, 71, 26, 0.8)'
+		// 	// });
+		// 	// layer.setData(lineData);
+		// 	// view.addLayer(layer);
+		// })
+
+		//上锁点车辆
+		// let dist = new Array();
+		// for (let i = 0; i < 301; i++) {
+		// 	dist[i] = new Array();
+		// }
+		// d3.csv('./data/gxdc_dd.csv', function(data){
+		// 	d3.csv('./data/lock.csv', function(t_data){
+		// 		for (let i = 0; i < data.length; i++) {
+		// 			if(data[i].LOCK_STATUS == 1){
+		// 				for (let j = 0; j < 301; j++) {
+		// 					let distance = GetDistance(data[i].LATITUDE, data[i].LONGITUDE, t_data[j].LATITUDE,
+		// 						t_data[j].LONGITUDE);
+		// 						if(distance <= 10) {
+		// 							dist[j].push(data[i].BICYCLE_ID);
+		// 						}
+		// 				}
+		// 			}
+		// 		}
+		// 		console.log(dist);
+		// 	})
+		// })
+
+
+
+		// let temData = [];
+		// d3.csv('./data/开锁.csv', function(data) {
+		// 	console.log(data);
+		// 	for (let i = 0; i < data.length; i++) {
+		// 		let lat = ;
+		// 		let lng = ;
+		// 		let tem = convertWGS84ToBD09(data[i].LONGITUDE, data[i].LATITUDE)
+		// 		lng = tem[0];
+		// 		lat = tem[1];
+		// 		// let point = new BMap.Point(tem[0], tem[1]);
+		// 		// let marker = new BMap.Marker(point);
+		// 		// map.addOverlay(marker);
+		// 		// points.push(point);
+		// 		// console.log(data[i].LONGITUDE);
+		// 		// console.log(data[i].LATITUDE);
+		// 			temData.push(data[i]);
+		// 	}
+		// 	let view = new mapvgl.View({
+		// 		map: map
+		// 	});
+		// 	let heatData = [];
+		// 	for (let i = 0; i < temData.length; i++) {
+		// 		heatData.push({
+		// 			geometry: {
+		// 				type: 'Point',
+		// 				coordinates: [temData[i].LONGITUDE, temData[i].LATITUDE]
+		// 			}
+		// 		});
+		// 	}
+		// 	let layer = new mapvgl.PointLayer({
+		// 		blend: 'lighter',
+		// 		shape: 'circle',
+		// 		color: 'rgba(255, 71, 26, 1)',
+		// 		size: 3
+		// 	});
+		// 	layer.setData(heatData);
+		// 	view.addLayer(layer);
+		// 	// let heatmap = new mapvgl.HeatmapLayer({
+		// 	// 	size: 5,
+		// 	// 	max: 20,
+		// 	// 	height: 0,
+		// 	// 	unit: 'm',
+		// 	// 	gradient: {
+		// 	// 		0.25: 'rgba(0, 0, 255, 1)',
+		// 	// 		0.55: 'rgba(0, 255, 0, 1)',
+		// 	// 		0.85: 'rgba(255, 255, 0, 1)',
+		// 	// 		1: 'rgba(255, 0, 0, 1)'
+		// 	// 	}
+		// 	// })
+		// 	// view.addLayer(heatmap);
+		// 	// heatmap.setData(heatData);
+		// })
+
+		//WGS84坐标转为GCJ02坐标
+		function convertWGS84ToGCJ02(WGS84_lng, WGS84_lat) {
+			let a = 6378245; //卫星椭球坐标投影到平面地图坐标系的投影因子
+			let ee = 0.00669342162296594323; //椭球的偏心率
+			let lng = parseFloat(WGS84_lng);
+			let lat = parseFloat(WGS84_lat);
+			let radLat = lat / 180 * Math.PI;
+			let magic = Math.sin(radLat);
+			magic = 1 - ee * magic * magic;
+			let sqrtMagic = Math.sqrt(magic);
+			let x = WGS84_lng - 105;
+			let y = WGS84_lat - 35;
+			let dLat = -100 + 2 * x + 3 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
+			dLat += (20 * Math.sin(6 * x * Math.PI) + 20 * Math.sin(2 * x * Math.PI)) * 2 / 3;
+			dLat += (20 * Math.sin(y * Math.PI) + 40 * Math.sin(y / 3 * Math.PI)) * 2 / 3;
+			dLat += (160 * Math.sin(y / 12 * Math.PI) + 320 * Math.sin(y * Math.PI / 30)) * 2 / 3;
+			dLat = (dLat * 180) / ((a * (1 - ee)) / (magic * sqrtMagic) * Math.PI);
+			let dLng = 300 + x + 2 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
+			dLng += (20 * Math.sin(6 * x * Math.PI) + 20 * Math.sin(2 * x * Math.PI)) * 2 / 3;
+			dLng += (20 * Math.sin(x * Math.PI) + 40 * Math.sin(x / 3 * Math.PI)) * 2 / 3;
+			dLng += (150 * Math.sin(x / 12 * Math.PI) + 300 * Math.sin(x / 30 * Math.PI)) * 2 / 3;
+			dLng = (dLng * 180) / (a / sqrtMagic * Math.cos(radLat) * Math.PI);
+			let GCJ02lng = lng + dLng;
+			let GCJ02lat = lat + dLat;
+			return [GCJ02lng, GCJ02lat]
+		}
+
+		//gcj02坐标转换为百度坐标
+		function convertGCJ02ToBD09(GCJ02_lng, GCJ02_lat) {
+			xPi = Math.PI * 3000.0 / 180.0;
+			x = GCJ02_lng
+			y = GCJ02_lat
+			z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * xPi);
+			theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * xPi);
+			lng = z * Math.cos(theta) + 0.0065;
+			lat = z * Math.sin(theta) + 0.006;
+			return [lng, lat]
+		}
+
+		//WGS84坐标转为百度坐标
+		function convertWGS84ToBD09(WGS84_lng, WGS84_lat) {
+			let tem = convertWGS84ToGCJ02(WGS84_lng, WGS84_lat);
+			return convertGCJ02ToBD09(tem[0], tem[1]);
+		}
+
+		//计算距离
+		function GetDistance(lat1, lng1, lat2, lng2) {
+			let EARTH_RADIUS = 6378.137;
+			radLat1 = rad(lat1);
+			radLat2 = rad(lat2);
+			a = radLat1 - radLat2;
+			b = rad(lng1) - rad(lng2);
+			s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+				Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+			s = s * EARTH_RADIUS;
+			return s * 1000;
+		}
+
+		function rad(d) {
+			return d * Math.PI / 180.0; //经纬度转换成三角函数中度分表形式
+		}
+	</script>

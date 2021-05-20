@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+		<script src="./libs/jquery-1.11.3.min.js"></script>
+		<script src="./js/convert.js"></script>
+		<script src="./libs/d3.v3.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=Gk5LGm4ZwVdBqnu0keruEHXYGlrGbQkn"></script>
+		<style>
+			body,
+			html,
+			#map {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				margin: 0;
+				font-family: "微软雅黑";
+			}
+		</style>
+	</head>
+	<body style="height: 100%; margin: 0">
+		<div id="map" style="height: 100%"></div>
+		<script>
+			// d3.csv("./data/high.csv", function(csvdata) {
+			// 	var map = new BMap.Map(document.getElementById('map'));
+			// 	map.centerAndZoom(new BMap.Point(118.167588, 24.483765), 11);
+			// 	map.enableScrollWheelZoom(true);
+			// 	var driving = new BMap.DrivingRoute("厦门");
+			// 	var i = 0;
+			// 	var interval = setInterval(function() {
+			// 		if (i == csvdata.length - 1) {
+			// 			clearInterval(interval);
+			// 			return;
+			// 		}
+			// 		if (csvdata[i].road_name == csvdata[i + 1].road_name) {
+			// 			let tem = convertWGS84ToBD09(csvdata[i].START_LONGITUDE, csvdata[i].START_LATITUDE);
+			// 			let tem1 = convertWGS84ToBD09(csvdata[i + 1].START_LONGITUDE, csvdata[i + 1].START_LATITUDE)
+			// 			driving.search(new BMap.Point(tem[0],tem[1]),
+			// 				new BMap.Point(tem1[0],tem1[1]));
+			// 			driving.setSearchCompleteCallback(function() {
+			// 				var pts = driving.getResults().getPlan(0).getRoute(0).getPath();
+
+			// 				var polyline = new BMap.Polyline(pts, {
+			// 					strokeColor: "red",
+			// 					strokeWeight: 2,
+			// 					enableClicking: false
+			// 				});
+			// 				map.addOverlay(polyline);
+			// 			});
+			// 		}
+			// 		i = i + 1;
+			// 	}, 0);
+			// });
+			d3.csv('./data/wyc.csv', function(data) {
+				let pdata = [];
+				for (let i = 0; i < data.length; i++) {
+					
+					pdata.push({
+						"type": "Feature",
+						"geometry": {
+							"type": "Point",
+							"coordinates": [
+								data[i].LONGITUDE,
+								data[i].LATITUDE
+							]
+						}
+					})
+				}
+				console.log(pdata);
+			})
+		</script>
+	</body>
+</html>

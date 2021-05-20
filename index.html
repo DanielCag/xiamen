@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>MapVGL</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<style>
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		#chart1 {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+		}
+	</style>
+	<script src="./libs/d3.v3.js"></script>
+	<script src="//api.map.baidu.com/api?v=1.0&type=webgl&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
+	<script src="//mapv.baidu.com/build/mapv.min.js"></script>
+	<script src="./js/common.js"></script>
+	<script src="./js/convert.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.107/dist/mapvgl.min.js"></script>
+	<script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.107/dist/mapvgl.threelayers.min.js"></script>
+</head>
+<body>
+	<div id="chart1"></div>
+	<script>
+		let map = initMap({
+			center: [118.167588, 24.483765],
+			zoom: 13,
+		});
+		// d3.csv('./data/gxdc_dd.csv', function(data) {
+		// 	let points = [];
+		// 	let start21 = [],
+		// 		end21 = [];
+		// 	let start22 = [],
+		// 		end22 = [];
+		// 	let start23 = [],
+		// 		end23 = [];
+		// 	let start24 = [],
+		// 		end24 = [];
+		// 	let start25 = [],
+		// 		end25 = [];
+		// 	start21.push(data[0])
+		// 	for (let i = 1; i < data.length; i++) {
+		// 		let lat = data[i].LATITUDE;
+		// 		let lng = data[i].LONGITUDE;
+		// 		let tem = convertWGS84ToBD09(lng, lat)
+		// 		data[i].LONGITUDE = tem[0];
+		// 		data[i].LATITUDE = tem[1];
+		// 		// let point = new BMap.Point(tem[0], tem[1]);
+		// 		// let marker = new BMap.Marker(point);
+		// 		// map.addOverlay(marker);
+		// 		// points.push(point);
+		// 		// console.log(data[i].LONGITUDE);
+		// 		// console.log(data[i].LATITUDE);
+		// 		if (data[i].LOCK_STATUS == 0 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/21' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			start21.push(data[i]);
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 0 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/22' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			start22.push(data[i]);
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 0 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/23' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			start23.push(data[i]);
+
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 0 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/24' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			start24.push(data[i]);
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 0 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/25' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			start25.push(data[i]);
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 1 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/21' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			end21.push(data[i]);
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 1 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/22' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			end22.push(data[i]);
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 1 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/23' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			end23.push(data[i]);
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 1 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/24' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			end24.push(data[i]);
+		// 		}
+		// 		if (data[i].LOCK_STATUS == 1 && data[i].UPDATE_TIME.split(' ')[0] == '2020/12/25' && data[i]
+		// 			.BICYCLE_ID != data[i - 1].BICYCLE_ID) {
+		// 			end25.push(data[i]);
+		// 		}
+		// 	}
+		// 	let view = new mapvgl.View({
+		// 		map: map
+		// 	});
+		// 	let heatData = [];
+		// 	for (let i = 0; i < end25.length; i++) {
+		// 		heatData.push({
+		// 			geometry: {
+		// 				type: 'Point',
+		// 				coordinates: [end25[i].LONGITUDE, end25[i].LATITUDE]
+		// 			}
+		// 		});
+		// 	}
+		// 	let heatmap = new mapvgl.HeatmapLayer({
+		// 		size: 60,
+		// 		max: 50,
+		// 		height: 0,
+		// 		unit: 'm',
+		// 		gradient: {
+		// 			0.25: 'rgba(0, 0, 255, 1)',
+		// 			0.55: 'rgba(0, 255, 0, 1)',
+		// 			0.85: 'rgba(255, 255, 0, 1)',
+		// 			1: 'rgba(255, 0, 0, 1)'
+		// 		}
+		// 	})
+		// 	view.addLayer(heatmap);
+		// 	heatmap.setData(heatData);
+			//飞线图
+			// let curve = new mapvgl.BezierCurve();
+			// let curveData = [];
+			// for (let i = 0; i < 50; i++) {
+			// 	startPoint = map.lnglatToMercator(start23[i].LONGITUDE,start23[i].LATITUDE);
+			// 	endPoint = map.lnglatToMercator(end23[i].LONGITUDE,end23[i].LATITUDE)
+			// 	// console.log(startPoint);
+			// 	curve.setOptions({
+			// 		start: [startPoint[0], startPoint[1]],
+			// 		end: [endPoint[0], endPoint[1]]
+			// 	});
+			// 	let curveModelData = curve.getPoints(60);
+			// 	curveData.push({
+			// 		geometry: {
+			// 			type: 'LineString',
+			// 			coordinates: curveModelData
+			// 		},
+			// 		properties: {
+			// 			count: Math.random()
+			// 		}
+			// 	});
+			// }
+			// let view = new mapvgl.View({
+			// 	effect: [
+			// 		new mapvgl.BrightEffect({
+			// 			threshold: 0,
+			// 			blurSize: 2,
+			// 			clarity: 0.4
+			// 		}),
+			// 	],
+			// 	map: map
+			// });
+			// let lineLayer = new mapvgl.LineTripLayer({
+			// 	color: 'rgb(255, 255, 204)',
+			// 	step: 0.3
+			// });
+			// view.addLayer(lineLayer);
+			// lineLayer.setData(curveData.map(item => {
+			// 	item.geometry.coordinates = item.geometry.coordinates.map(item => {
+			// 		item[2] += 3;
+			// 		return item;
+			// 	})
+			// 	return item;
+			// }));
+			// let LineLayer = new mapvgl.SimpleLineLayer({
+			// 	blend: 'lighter',
+			// 	color: 'rgb(255, 153, 0, 0.6)'
+			// });
+			// view.addLayer(LineLayer);
+			// LineLayer.setData(curveData);
+			// console.log(curveData);
+			// console.log(start21);
+			// console.log(start22);
+			// console.log(start23);
+			// console.log(start24);
+			// console.log(start25);
+			// console.log(end21);
+			// console.log(end22);
+			// console.log(end23);
+			// console.log(end24);
+			// console.log(end25);
+		// })
+		
+		
+		//停车点
+		let point = [];
+		let lineData = [];
+		d3.csv('./data/gxdc_tcd.csv', function(data) {
+				console.log(data);
+		
+			for (var i = 0; i < data.length; i++) {
+				data[i].FENCE_LOC = data[i].FENCE_LOC.split(',');
+				for (let j = 0; j < 10;) {
+					let lng = parseFloat(data[i].FENCE_LOC[j]);
+					let lat = parseFloat(data[i].FENCE_LOC[j + 1]);
+					j += 2;
+					let tem = convertWGS84ToBD09(lng, lat);
+					point.push(tem[0]);
+					// console.log(tem[0]);
+					point.push(tem[1]);
+					// console.log(tem[1]);
+				}
+				lineData.push({
+					geometry: {
+						type: 'LineString',
+						coordinates: [
+							[point[i * 10], point[i * 10 + 1]],
+							[point[i * 10 + 2], point[i * 10 + 3]],
+							[point[i * 10 + 4], point[i * 10 + 5]],
+							[point[i * 10 + 6], point[i * 10 + 7]],
+							[point[i * 10 + 8], point[i * 10 + 9]],
+						]
+					},
+				});
+			}
+			let view = new mapvgl.View({
+				map: map
+			});
+			let layer = new mapvgl.LineLayer({
+				blend: 'lighter',
+				color: 'rgba(255, 71, 26, 0.8)'
+			});
+			layer.setData(lineData);
+			view.addLayer(layer);
+		})
+	</script>
+
+
+<!-- <!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<style type="text/css">
+			body,
+			html,
+			#allmap {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				margin: 0;
+				font-family: "微软雅黑";
+				z-index: 0;
+				position: absolute;
+				z-index: 1;
+			}
+		</style>
+		<script src="./libs/d3.v3.js"></script>
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=Gk5LGm4ZwVdBqnu0keruEHXYGlrGbQkn"></script>
+		<script src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=Gk5LGm4ZwVdBqnu0keruEHXYGlrGbQkn"></script>
+		<script src="./libs/echarts.js"></script>
+		<script src="./libs/jquery-1.11.3.min.js"></script>
+		<title>城市交通友好分析</title>
+	</head>
+	<body>
+		<div id="allmap"></div>
+		<div id="bar"></div>
+	</body>
+</html>
+<!-- <script type="text/javascript">
+	choice = '25';
+ 	let map = new BMap.Map("allmap");
+ 	map.centerAndZoom(new BMap.Point(118.167588, 24.483765), 13);
+ 	map.enableScrollWheelZoom(true);
+ 	map.setMapStyle({
+ 		style: "light",
+ 		styleJson: [{
+ 				"featureType": "highway",
+ 				"elementType": "geometry.fill",
+ 				"stylers": {
+ 					"color": "#ffffffff",
+ 					"hue": "#ffffff",
+ 					"weight": "1",
+ 					"lightness": 1,
+ 					"saturation": 100,
+ 					"visibility": "on"
+ 				}
+ 			},
+ 			{
+ 				'featureType': 'arterial',
+ 				'elementType': 'geometry',
+ 				'stylers': {
+ 					'color': '#fff8cf'
+ 				}
+ 			},
+ 			{
+ 				'featureType': 'arterial',
+ 				'elementType': 'labels',
+ 				'stylers': {
+ 					'visibility': 'on'
+ 				}
+ 			},
+ 			{
+ 				'featureType': 'green',
+ 				'elementType': 'geometry',
+ 				'stylers': {
+ 					'visibility': 'off'
+ 				}
+ 			},
+ 			{
+ 				'featureType': 'subway',
+ 				'elementType': 'geometry.stroke',
+ 				'stylers': {
+ 					'color': '#ffffff'
+ 				}
+ 			},
+ 			{
+ 				'featureType': 'subway',
+ 				'elementType': 'labels',
+ 				'stylers': {
+ 					'visibility': 'off'
+ 				}
+ 			}
+ 		]
+ 	});
+ </script> -->
+<!-- <script src="./js/convert.js"></script>
+<script src="./js/hotSpot.js"></script>
+<script src="./js/topology.js"></script>
+<script type="text/javascript">
+	let point = [];
+	let lineData = [];
+	let dt = new Array();
+	for (var i = 0; i < 41; i++) {
+		dt[i] = new Array();
+	}
+	d3.json('./data/1.json', function(data) {
+		d3.csv('./data/opengraph.csv', function(t_data) {
+			for (let i = 0; i < data.length; i++) {
+				for (let j = 0; j < t_data.length; j++) {
+					let distance = GetDistance(data[i].LATITUDE, data[i].LONGITUDE, t_data[j]
+						.LATITUDE,
+						t_data[j].LONGITUDE);
+						if(distance <= 300){
+							dt[i].push(j);
+						}
+					
+				}
+			}
+			console.log(dt);
+			// for (let i = 0; i < data.length; i++) {
+			// 	if (data[i].LOCK_STATUS == 1) {
+			// 		for (let j = 5; j < 10; j++) {
+			// 			for (let k = 0; k < dt[j].length; k++) {
+			// 				if (data[i].BICYCLE_ID == dt[j][k].BICYCLE_ID &&
+			// 					data[i].UPDATE_TIME.split(' ')[0] == dt[j][k].UPDATE_TIME.split(' ')[0] &&
+			// 					parseFloat(data[i].UPDATE_TIME.split(' ')[1].split(':')[0]) >= parseFloat(
+			// 						dt[j][k].UPDATE_TIME.split(' ')[1].split(':')[0])) {
+			// 					d[j][k].push(data[i]);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// }
+			// console.log(dt);		
+			console.log(data);
+		})
+	})
+
+	function GetDistance(lat1, lng1, lat2, lng2) {
+		let EARTH_RADIUS = 6378.137;
+		radLat1 = rad(lat1);
+		radLat2 = rad(lat2);
+		a = radLat1 - radLat2;
+		b = rad(lng1) - rad(lng2);
+		s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+			Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+		s = s * EARTH_RADIUS;
+		return s * 1000;
+	}
+
+	function rad(d) {
+		return d * Math.PI / 180.0; //经纬度转换成三角函数中度分表形式
+	}
+</script> -->

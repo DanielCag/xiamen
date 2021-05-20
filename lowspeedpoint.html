@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>MapVGL</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <style>
+        html,
+		body {
+                    width: 100%;
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                }
+        #chart1 {
+            width: 100%;
+            height: 95%;
+        }
+        #select{
+            background-color: rgba(170, 174, 176, 0.2);
+            width: 100%;
+            height: 5%
+        }
+        #jam{
+            font-size: 30px;
+            margin:0 20%;
+        }
+		
+    </style>
+    <script src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=wIt2mDCMGWRIi2pioR8GZnfrhSKQHzLY"></script>
+    <script src="http://mapv.baidu.com/build/mapv.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="./libs/jquery-1.11.3.min.js"></script>
+	<!-- <script src="js/jquery-1.11.3.min.js"></script> -->
+    <script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.79/dist/mapvgl.min.js"></script>
+</head>
+<body>
+<div id="select">
+    <label id="jam" for="">拥堵概览</label>
+    <label for="">绘图选项</label>
+    <select name="" id="draw_type">
+        <option value="">请选择</option>
+        <option value="21">2月21</option>
+        <option value="22">2月22</option>
+        <option value="23">2月23</option>
+        <option value="24">2月24</option>
+		<option value="25">2月25</option>
+    </select>
+    <select name="" id="time"></select>
+    <!-- <a href="index.html"><input type="submit" value="back"></a> -->
+</div>
+<div id="chart1"></div>
+<script>
+    let tt = document.getElementById('time')
+    let op = "<option value=''>请选择时段</option>"
+    for(let i=6;i<10;i++){
+        op += `<option value="">${i+'-'+(i+1)}</option>>`
+    }
+    tt.innerHTML=op
+	
+    $("#time").change(re=>{
+        let drawType = $("#draw_type").find("option:selected").text()
+        let time = $("#time").find("option:selected").text()
+        let dataPath;
+        if(drawType=="2月21"){
+            dataPath = 'data/lowspeed/20201221/'+time+'.json'
+        }else if (drawType=="2月22"){
+            dataPath = 'data/lowspeed/20201222/'+time+'.json'
+        }else if(drawType =="2月23"){
+            dataPath= 'data/lowspeed/20201223/'+time+'.json'
+        }else if(drawType == "2月24"){
+            dataPath_1 = 'data/lowspeed/20201224/'+time+'.json'
+        }else if(drawType=="2月25"){
+			dataPath='data/lowspeed/20201225/'+time+'.json'
+		}
+		function draw(p1) {
+		    var map = initMap({
+		        tilt: 30,
+		        heading: 0,
+		        center: [118.152, 24.50],
+		        zoom: 14,
+		        style: purpleStyle
+		    });
+		    var view = new mapvgl.View({
+		        map: map
+		    });
+		    let color_1 = 'rgba(134, 13, 39, 1.0)'
+		    drawPoint(view,p1,color_1)
+		}
+		draw(dataPath);
+		function drawPoint(view,path,color){
+		    fetch(path).then(rs1=> {
+		        return rs1.json();
+		    }).then(rs1 => {
+		        // console.log(rs1.geometry)
+		        var data1 = rs1;
+		        view.addLayer(new mapvgl.PointLayer({
+		            blend: 'lighter',
+		            shape: 'circle',
+		            color: color, 
+		            data: data1,
+		            size: 1
+		        }));
+		    });
+		}
+    })
+
+</script>
+</body>
+</html>

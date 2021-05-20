@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Document</title>
+		<!--    <link rel="stylesheet" href="./css/grid.css"> -->
+		<script src="./libs/d3.v5.min.js"></script>
+		<script src="./libs/echarts.js"></script>
+		<script src="./libs/dark.js"></script>
+		<script src="./libs/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=Gk5LGm4ZwVdBqnu0keruEHXYGlrGbQkn"></script>
+		<script src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=Gk5LGm4ZwVdBqnu0keruEHXYGlrGbQkn"></script>
+		<script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.105/dist/mapvgl.min.js"></script>
+		<script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.105/dist/mapvgl.threelayers.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="./css/style.css" />
+	</head>
+	<body>
+		<div id='title'>基于多源城市交通大数据的绿色骑行可视化系统</div>
+		<div id="vision">
+			<button type="button" id="btn" onclick="fir()">交通态势总览</button>
+			<button type="button" id="btn" onclick="sec()">拥堵点分析</button>
+			<button type="button" id="btn" onclick="thi()">节点流量拓扑</button>
+		</div>
+		<div id="map"></div>
+		<div>
+			<div id="text"></div>
+			<div id="word"></div>
+		</div>
+		<div id="chart1"></div>
+		<div id="chart2"></div>
+		<div id="chart3"></div>
+		<div id="bar"></div>
+		<div id="chart4"></div>
+		<div id="chart5"></div>
+		</div>
+		<div id="main"></div>
+		<label id="jam" for="">拥堵概览</label>
+		
+		<div id="select">
+			<label>绘图选项</label>
+			<select name="" id="draw_type">
+				<option value="">请选择</option>
+				<option value="21">出租车</option>
+				<option value="22">网约车</option>
+				<option value="23">共享单车</option>
+			</select>
+			<select name="" id="time"></select>
+		</div>
+	</body>
+</html>
+<script src="./js/common.js"></script>
+<script src="./js/view.js"></script>
+<script src="./js/convert.js"></script>
+<script src="./js/hotSpot.js"></script>
+<script src="./js/topology.js"></script>
+<script src="./js/picker.js"></script>
+<script src="./js/congest.js"></script>
+<script src="./js/friend.js"></script>
+<script src="./js/mapNet.js"></script>
+<script src="./js/heatmap.js"></script>
+<script src="./js/picker.js"></script>
+<script src="./js/point.js"></script>
+<script src="./js/one_road.js"></script>
+<script type="text/javascript">
+	fir();
+	//heatmap();
+</script>
